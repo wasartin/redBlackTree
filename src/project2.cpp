@@ -7,6 +7,7 @@ using namespace std;
 
 void init(bool noisy);
 void flagHandling(int argNum, char *args[]);
+void outputHelp();
 
 /**
  * Main runner of the classes
@@ -20,6 +21,7 @@ int main(int argc, char *argv[]){
 
 void init(bool noisy){
   cout << "Always gotta init" << endl;
+
 }
 
 void flagHandling(int argNum, char *args[]){
@@ -28,6 +30,9 @@ void flagHandling(int argNum, char *args[]){
       cout<< "----------Debug Mode----------"<<endl;
 
       cout<< "---End Of Debug Mode----------"<<endl;
+    }
+    else if(args[1][0] == '-' && args[1][1] == 'H'){
+      outputHelp();
     }
     else if(args[1][0] == '-' && args[1][1] == 'T'){
       cout<< "----------Test Mode----------"<<endl;
@@ -39,4 +44,13 @@ void flagHandling(int argNum, char *args[]){
       cout<< "-------End Of Test Mode------"<<endl;
     }
   }
+}
+
+
+void outputHelp(){
+  cout << "Flag options" << endl;
+  cout << "\t Help Screen (this): -H" << endl;
+  cout << "\t Debugging: -D" << endl;
+  cout << "\t Run All Tests: -T n " << endl;
+  cout << "\t Run with inputFile: path/to/file" << endl;
 }
