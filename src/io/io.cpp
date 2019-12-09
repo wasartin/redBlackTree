@@ -164,7 +164,7 @@ vector<Thread_t> parseThread(vector<Thread_t> threads, string input){
 
 }
 
-
+/*
 uint8_t extractNumber(string input) {
   string numberFound;
   for(uint8_t i = 0; i < input.length(); i++){
@@ -177,6 +177,7 @@ uint8_t extractNumber(string input) {
 
   return atoi(numberFound.c_str());
 }
+*/
 
 Command command_init_from_str(string input){
   //extract ACTION & argument

@@ -48,6 +48,7 @@ void percolateUpUpdates(Node *node_v);
 
 string simpleString(Node *node);
 void printNodes(string prefix, Node *n);
+void printNodesAndNil(string prefix, Node *n);
 
 bool isNilNode(Node *node);
 
@@ -66,6 +67,8 @@ vector<Node> InOrder(Node *node_x);
  * Param: node_x, a pointer to a node in a Binary Tree
  */
 vector<Node> PreOrder(Node *node_x);
+
+vector<Node> PreOrderWithNilNodes(Node *node_x);
 
 /**
  * List Keys of the given subtree in Post Order

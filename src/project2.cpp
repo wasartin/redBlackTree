@@ -46,7 +46,6 @@ void flagHandling(int argNum, char *args[]){
   }
 }
 
-
 void outputHelp(){
   cout << "Flag options" << endl;
   cout << "\t Help Screen (this): -H" << endl;

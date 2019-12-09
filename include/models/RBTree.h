@@ -11,6 +11,7 @@
 #include <stdint.h> /* For uint8_t */
 
 #include "node.h"
+#include "../lib/utils.h" /* For uint8_t extractNumber(string input) */
 
 using namespace std;
 
@@ -114,7 +115,22 @@ Node *rb_insert(uint8_t key);
 
 uint8_t rb_delete(uint8_t key);
 
-void buildTreeFromPreOrderNodes(RBTree *tree, string nodes[]);
+/**
+ * Helper function to populate an array of Nodes.
+ */
+void setNodesFromStringArr(Node *nodes, string inputNodes[], uint8_t numOfNodes);
+
+/**
+ * This function populates a tree with nodes from a preOrder traversal.
+ * This is for filehandling and the IO for the project
+ */
+void buildTreeFromPreOrderNodes(RBTree *tree, Node *preOrderNodes, uint8_t numOfNodes);
+
+/**
+ * This recursive helper function populates a tree with nodes from a preOrder traversal.
+ * This is for filehandling and the IO for the project
+ */
+Node* buildTreeFromPreOrderNodes_Rec(Node *preOrderNodes, uint8_t* preIndexPtr, uint8_t low, uint8_t high, uint8_t numOfNodes);
 
 //I have no idea how to do this without any indication what the root node is
 void buildTreeFromInOrderNodes(RBTree *tree, vector<Node> nodes);

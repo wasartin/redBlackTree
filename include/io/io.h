@@ -8,6 +8,7 @@
 #include <vector>
 #include <cstring>
 
+#include "../lib/utils.h" /* For uint8_t extractNumber(string input) */
 #include "fileCommands.h"
 #include "../models/RBTree.h"
 #include "../models/threads.h"
@@ -35,7 +36,7 @@ typedef struct FileContents_t{
 
 
 FILE_SECTION determineFileSection(string input);
-uint8_t extractNumber(string input);
+//uint8_t extractNumber(string input);
 Command command_init_from_str(string input);
 Command command_init(THREAD_TYPE threadType, ACTION action, uint8_t arg);
 

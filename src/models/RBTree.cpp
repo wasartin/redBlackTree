@@ -1,7 +1,7 @@
 #include "../../include/models/RBTree.h"
 
 
-Node *buildTreeFromPreOrderNodes_Rec(string preNodes[],  int *index_ptr, int n);
+//Node *buildTreeFromPreOrderNodes_Rec(string preNodes[],  int *index_ptr, int n);
 
 RBTree::~RBTree(){
   RBTree::destroyTree();
@@ -326,43 +326,53 @@ Node *rb_insert(uint8_t key){
   return node;
 }
 
-void setNodeFromString(Node *node, string data){
-
+void setNodesFromStringArr(Node *nodes, string inputNodes[], uint8_t numOfNodes){
+  for(uint8_t i = 0; i < numOfNodes; i++){
+    nodes[i] = node_init_from_str(inputNodes[i]);
+  }
 }
 
-void buildTreeFromPreOrderNodes(RBTree *tree, string nodes[]){
-  // Initialize index as 0. Value of index is used in recursion to maintain
-  // the current index in pre[] and preLN[] arrays.
-  int index = 0;
-
-  Node *root =  buildTreeFromPreOrderNodes_Rec (nodes, &index, nodes->size());
+/**
+ * This function populates a tree with nodes from a preOrder traversal.
+ * This is for filehandling and the IO for the project
+ */
+void buildTreeFromPreOrderNodes(RBTree *tree, Node *preOrderNodes, uint8_t numOfNodes){
+  uint8_t index = 0;
+  Node *root;
+  root = buildTreeFromPreOrderNodes_Rec(preOrderNodes, &index, 0, numOfNodes - 1, numOfNodes);
   tree->setRoot(root);
 }
 
-/* A recursive function to create a Binary Tree from given pre[]
-   preLN[] arrays. The function returns root of tree. index_ptr is used
-   to update index values in recursive calls. index must be initially
-   passed as 0 */
-Node *buildTreeFromPreOrderNodes_Rec(string preNodes[],  int *index_ptr, int n) {
-    int index = *index_ptr; // store the current value of index in pre[]
-
-    // Base Case: All nodes are constructed
-    if (index == n){
-      return NULL;
+/**
+ * This recursive helper function populates a tree with nodes from a preOrder traversal.
+ * This is for filehandling and the IO for the project
+ */
+Node *buildTreeFromPreOrderNodes_Rec(Node *preOrderNodes, uint8_t* preIndexPtr, uint8_t low, uint8_t high, uint8_t numOfNodes){
+  Node *root = &preOrderNodes[*preIndexPtr];
+  *preIndexPtr = *preIndexPtr + 1;
+  if (low == high){
+      return root;
+  }
+  uint8_t i;
+  for (i = low; i <= high; ++i){
+    //uint8_t key = extractNumber(preOrderNodes[i]);
+    if (preOrderNodes[i].key > root->key){
+        break;
     }
+  }
 
+  if(!isNilNode(root)){
 
-    // Allocate memory for this node and increment index for
-    // subsequent recursive calls
-    Node temp = node_init_from_str(preNodes[index]);
-    Node *tempPtr = &temp;
-    (*index_ptr)++;
+    root->left = buildTreeFromPreOrderNodes_Rec(preOrderNodes, preIndexPtr, *preIndexPtr, i - 1, numOfNodes);
+    root->right = buildTreeFromPreOrderNodes_Rec(preOrderNodes, preIndexPtr, i, high, numOfNodes);
 
-    // If this is an internal node, construct left and right subtrees and link the subtrees
-    if (preNodes[index] != "f") {
-      tempPtr->left  = buildTreeFromPreOrderNodes_Rec(preNodes, index_ptr, n);
-      tempPtr->right = buildTreeFromPreOrderNodes_Rec(preNodes, index_ptr, n);
-    }
+    /* //For debugging
+    cout << "\tValues, PreIndexPointer:= " << +(*preIndexPtr) << ", i:= " << +(i) << ", high:= " << +(high) << endl;
+    cout << "\t\t\tLeft:= " << simpleString(root->left) << endl;
+    cout << "\t\tCurrNode:= " << simpleString(root) << endl;
+    cout << "\t\t\tRight:= " << simpleString(root->right) << endl;
+    */
+  }
 
-    return tempPtr;
+  return root;
 }

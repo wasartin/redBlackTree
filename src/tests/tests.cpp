@@ -38,14 +38,13 @@ bool runAllTests(bool noisy){
 
   bool nodes = NodeTest_All(noisy);
   bool io = IOTests_ALL(noisy);
-
   bool bstTree = BSTreeTest_All(noisy);
   bool rbtree = RBTreeFunctionTests_All(noisy);
 
   bool result = nodes && io && bstTree && rbtree;
   return result;
 
-  //return io;
+  ///return BSTreeTest_All(noisy);
 }
 
 
