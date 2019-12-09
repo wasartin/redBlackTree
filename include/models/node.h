@@ -18,19 +18,19 @@ using namespace std;
  *      BLACK: For a black colored node
  *      UNKNOWN: For the NULL object design pattern
  */
-enum COLOR{RED, BLACK, UNKNOWN};
+enum COLOR{RED, BLACK};
 
 /**
  * A struct to define a node, slightly modified from the one given
  * by the assignment
  */
 typedef struct Node{
-  uint8_t key = 0;
-  Node *left = nullptr;
-  Node *right = nullptr;
-  Node *parent = nullptr;
-  uint8_t size = 0;
-  COLOR color = UNKNOWN;
+  uint8_t key;
+  Node *left = NULL;
+  Node *right = NULL;
+  Node *parent = NULL;
+  uint8_t size;
+  COLOR color;
   pthread_mutex_t *m = NULL;
 } Node;
 

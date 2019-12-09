@@ -3,19 +3,6 @@
 #include <cctype>
 #include <algorithm>
 
-/**
- * Helper function for cleaning the input line up.
- */
-void cleanseInputString(string *input){
-  //Remove newlines
-  input->erase(std::remove(input->begin(), input->end(), '\n'), input->end());
-  //Remove the spaces
-  input->erase(std::remove_if(
-    begin(*input), end(*input),
-    [l = std::locale{}](auto ch) { return std::isspace(ch, l); }
-  ), end(*input));
-}
-
 Command command_init(THREAD_TYPE threadType, ACTION action, uint8_t arg){
   Command command = {};
   command.threadType = threadType;
@@ -26,19 +13,19 @@ Command command_init(THREAD_TYPE threadType, ACTION action, uint8_t arg){
 
 FILE_SECTION determineFileSection(string input){
   if(isdigit(input.at(0)) || input.at(0) == 'f'){
-    return FILE_SECTION::TREE;
+    return TREE;
   }
   //Didn't include 1st letter b/c the case might differ
   if(input.find("hread") != string::npos && (input.find("earch") != string::npos || input.find("odify") != string::npos) ){
-    return FILE_SECTION::THREAD;
+    return THREAD;
   }
   if(input.find("||") != string::npos){
-    return FILE_SECTION::COMMANDS;
+    return COMMANDS;
   }
   if(input.length() == 0 || input.at(0) == '\n'){
-    return FILE_SECTION::EMPTY;//Idk if I will get empty lines, so
+    return EMPTY;//Idk if I will get empty lines, so
   }
-  return FILE_SECTION::UNKNOWN;
+  return EMPTY;
 }
 
 void parseFile(FileContents_t *fileContents, string inputFile){
@@ -61,23 +48,23 @@ void parseFile(FileContents_t *fileContents, string inputFile){
         lineCounter++;
         currSection = determineFileSection(line);
         switch(currSection){
-          case FILE_SECTION::TREE:
+          case TREE:
             nodes = parseNodes(line);
             break;
-          case FILE_SECTION::THREAD:
+          case THREAD:
             tempThread = parseThread(line);//should change to pointer
             if(tempThread.size() != 0){
-              if(tempThread[0].threadType == THREAD_TYPE::READER){
+              if(tempThread[0].threadType == READER){
                 readerT = tempThread;
-              }else if(tempThread[0].threadType == THREAD_TYPE::WRITER){
+              }else if(tempThread[0].threadType == WRITER){
                 writerT = tempThread;
               }
             }
             break;
-          case FILE_SECTION::COMMANDS:
+          case COMMANDS:
             commands = parseCommands(line);
             break;
-          case FILE_SECTION::EMPTY:
+          case EMPTY:
             break;
           default :
             break;
@@ -136,20 +123,18 @@ Command command_init_from_str(string input){
   ACTION act;
   uint8_t arg;
   if(input.find("search") != string::npos){
-    threadType = THREAD_TYPE::READER;
-    act = ACTION::SEARCH;
+    threadType = READER;
+    act = SEARCH;
     arg = extractNumber(input);
   } else if(input.find("insert") != string::npos){
-    threadType = THREAD_TYPE::WRITER;
-    act = ACTION::INSERT;
+    threadType = WRITER;
+    act = INSERT;
     arg = extractNumber(input);
   } else if(input.find("delete") != string::npos){
-    threadType = THREAD_TYPE::WRITER;
-    act = ACTION::DELETE;
+    threadType = WRITER;
+    act = DELETE;
     arg = extractNumber(input);
   } else{
-    threadType = THREAD_TYPE::UNKNOWN;
-    act = ACTION::UNKNOWN;
     arg = extractNumber(input);
   }
 
@@ -164,7 +149,7 @@ Command command_init_from_str(string input){
 vector<Command> parseCommands(string input){
   //Adding this for easier parsing
   input += " ||";
-  cleanseInputString(&input);
+  //cleanseInputString(&input);
   vector<Command> result;
   string toParse = input;
   string token;

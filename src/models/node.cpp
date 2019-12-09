@@ -2,9 +2,9 @@
 
 void node_init(Node *node, uint8_t key){
   node->key = key;
-  node->left = nullptr;
-  node->right = nullptr;
-  node->parent = nullptr;
+  node->left = NULL;
+  node->right = NULL;
+  node->parent = NULL;
   node->size = 1;
   node->color = RED;
   pthread_mutex_init(node->m, NULL);
@@ -27,7 +27,7 @@ Node node_init_from_str(string data){
   }else{
     string numStr = "";
     for(uint8_t i = 0; i < data.length(); i++){
-      COLOR color = UNKNOWN;
+      COLOR color = RED;
       if(isdigit(data.at(i))){
         numStr+=data.at(i);
       }else if(data.at(i) == 'b' || data.at(i) == 'r'){//f is new for NIL NODES

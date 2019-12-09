@@ -83,7 +83,7 @@ void RBInsert(RBTree *tree, Node *node_z){
     }
   }
   node_z->parent = node_y;
-  if(node_y == nullptr || isNilNode(node_y)){
+  if(node_y == NULL || isNilNode(node_y)){
     tree->setRoot(node_z);
   }
   else if(node_z->key < node_y->key){

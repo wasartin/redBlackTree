@@ -57,17 +57,14 @@ uint8_t newNode_NodeTest(bool noisy){
   string black = "7b";
   Node blackResult = node_init_from_str(black);
   if(simpleString(&blackResult) == black) correct++;
-  cout << "Expected: " << black << ", actual: " << simpleString(&blackResult) << endl;
 
   string red = "8r";
   Node redResult = node_init_from_str(red);
   if(simpleString(&redResult) == red) correct++;
-  cout << "Expected: " << red << ", actual: " << simpleString(&redResult) << endl;
 
   string nilNode = "f";
   Node nilNodeResult = node_init_from_str(nilNode);
   if(simpleString(&nilNodeResult) == nilNode) correct++;
-  cout << "Expected: " << nilNode << ", actual: " << simpleString(&nilNodeResult) << endl;
 
   return (correct == expected) ? 1 : 0;
 }

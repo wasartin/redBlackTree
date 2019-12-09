@@ -7,10 +7,10 @@ string thread_to_str(Thread_t input){
   string result = "ThreadId: ?, Thread Num:= " + convert.str();
   result += ", ThreadType:= ";
   switch(input.threadType){
-    case THREAD_TYPE::READER:
+    case READER:
       result += "READER";
       break;
-    case THREAD_TYPE::WRITER:
+    case WRITER:
       result += "WRITER";
       break;
     default:
@@ -29,12 +29,10 @@ Thread_t thread_init_from_str(string type, uint8_t threadNum, uint8_t threadId){
   string WRITER_KEY = "Modify";
 
   if(type == READER_KEY){
-    result.threadType = THREAD_TYPE::READER;
+    result.threadType = READER;
   } else if(type== WRITER_KEY){
-    result.threadType = THREAD_TYPE::WRITER;
-  } else{
-    result.threadType = THREAD_TYPE::UNKNOWN;
-  }
+    result.threadType = WRITER;
+  } 
 
   result.threadNum = threadNum;
   result.threadId = threadId;

@@ -19,7 +19,7 @@ using namespace std;
  *      WRITER: For Insert/Delete Actions
  *      UNKNOWN: For the NULL object design pattern
  */
-enum class THREAD_TYPE{READER, WRITER, UNKNOWN};
+enum THREAD_TYPE{READER, WRITER};
 
 typedef struct Thread_t{
   THREAD_TYPE threadType;

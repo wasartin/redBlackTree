@@ -79,7 +79,7 @@ uint8_t parseThreadsTest(bool noisy){
   readerThreads = parseThread(readerLineInput);
 
   for(uint8_t i = 0; i < readerThreads.size(); i++){
-    if(readerThreads[i].threadType == THREAD_TYPE::READER && readerThreads[i].threadNum == i) correct++;
+    if(readerThreads[i].threadType ==  READER && readerThreads[i].threadNum == i) correct++;
     if(noisy){
       string currThread = thread_to_str(readerThreads[i]);
       cout << "Run: " << +(tempVarRun++) << ", currThread:= " << currThread << endl;
@@ -91,7 +91,7 @@ uint8_t parseThreadsTest(bool noisy){
   writerThreads = parseThread(writerLineInput);
 
   for(uint8_t i = 0; i < writerThreads.size(); i++){
-    if(writerThreads[i].threadType == THREAD_TYPE::WRITER && writerThreads[i].threadNum == i) correct++;
+    if(writerThreads[i].threadType ==  WRITER && writerThreads[i].threadNum == i) correct++;
     if(noisy){
       string currThread = thread_to_str(writerThreads[i]);
       cout << "Run: " << +(tempVarRun++) << ", currThread:= " << currThread << endl;
@@ -110,11 +110,11 @@ uint8_t parseCommandsTest(bool noisy){
   uint8_t correct = 0;
   uint8_t expected = 6;
   if(result.size() == 5) correct++;
-  if(result[0].threadType == THREAD_TYPE::READER && result[0].action == ACTION::SEARCH && result[0].arg == 10) correct++;
-  if(result[1].threadType == THREAD_TYPE::WRITER && result[1].action == ACTION::DELETE && result[1].arg == 10) correct++;
-  if(result[2].threadType == THREAD_TYPE::WRITER && result[2].action == ACTION::INSERT && result[2].arg == 15) correct++;
-  if(result[3].threadType == THREAD_TYPE::WRITER && result[3].action == ACTION::INSERT && result[3].arg ==  5) correct++;
-  if(result[4].threadType == THREAD_TYPE::READER && result[4].action == ACTION::SEARCH && result[4].arg == 20) correct++;
+  if(result[0].threadType ==  READER && result[0].action ==  SEARCH && result[0].arg == 10) correct++;
+  if(result[1].threadType ==  WRITER && result[1].action ==  DELETE && result[1].arg == 10) correct++;
+  if(result[2].threadType ==  WRITER && result[2].action ==  INSERT && result[2].arg == 15) correct++;
+  if(result[3].threadType ==  WRITER && result[3].action ==  INSERT && result[3].arg ==  5) correct++;
+  if(result[4].threadType ==  READER && result[4].action ==  SEARCH && result[4].arg == 20) correct++;
 
   return (correct == expected) ? 1 : 0;
 }
@@ -157,10 +157,10 @@ uint8_t parseFileTest(bool noisy){
   uint8_t correctThread = 0;
   uint8_t expectedThread = 7;
   for(uint8_t i = 0; i < fileContents.readerThreads.size(); i++){
-    if(fileContents.readerThreads[i].threadType == THREAD_TYPE::READER) correctThread++;
+    if(fileContents.readerThreads[i].threadType ==  READER) correctThread++;
   }
   for(uint8_t i = 0; i < fileContents.writerThreads.size(); i++){
-    if(fileContents.writerThreads[i].threadType == THREAD_TYPE::WRITER) correctThread++;
+    if(fileContents.writerThreads[i].threadType ==  WRITER) correctThread++;
   }
 
   uint8_t threadResult = (correctThread == expectedThread)? 1 : 0;
@@ -168,11 +168,11 @@ uint8_t parseFileTest(bool noisy){
   //Commands Test
   uint8_t correctCommands = 0;
   uint8_t expectedCommands = 5;
-  if(fileContents.commands[0].threadType == THREAD_TYPE::READER && fileContents.commands[0].action == ACTION::SEARCH && fileContents.commands[0].arg == 10) correctCommands++;
-  if(fileContents.commands[1].threadType == THREAD_TYPE::WRITER && fileContents.commands[1].action == ACTION::DELETE && fileContents.commands[1].arg == 10) correctCommands++;
-  if(fileContents.commands[2].threadType == THREAD_TYPE::WRITER && fileContents.commands[2].action == ACTION::INSERT && fileContents.commands[2].arg == 15) correctCommands++;
-  if(fileContents.commands[3].threadType == THREAD_TYPE::WRITER && fileContents.commands[3].action == ACTION::INSERT && fileContents.commands[3].arg ==  5) correctCommands++;
-  if(fileContents.commands[4].threadType == THREAD_TYPE::READER && fileContents.commands[4].action == ACTION::SEARCH && fileContents.commands[4].arg == 20) correctCommands++;
+  if(fileContents.commands[0].threadType ==  READER && fileContents.commands[0].action ==  SEARCH && fileContents.commands[0].arg == 10) correctCommands++;
+  if(fileContents.commands[1].threadType ==  WRITER && fileContents.commands[1].action ==  DELETE && fileContents.commands[1].arg == 10) correctCommands++;
+  if(fileContents.commands[2].threadType ==  WRITER && fileContents.commands[2].action ==  INSERT && fileContents.commands[2].arg == 15) correctCommands++;
+  if(fileContents.commands[3].threadType ==  WRITER && fileContents.commands[3].action ==  INSERT && fileContents.commands[3].arg ==  5) correctCommands++;
+  if(fileContents.commands[4].threadType ==  READER && fileContents.commands[4].action ==  SEARCH && fileContents.commands[4].arg == 20) correctCommands++;
 
   uint8_t commandResult = (correctCommands == expectedCommands)? 1 : 0;
 

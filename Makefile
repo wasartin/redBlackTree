@@ -10,7 +10,8 @@ DEPS = Makefile.depend
 
 INCLUDES = -I./include
 # -g is for gdb, -ggdb has more debugging symbols.
-CXXFLAGS = -ggdb -Wall -Werror $(INCLUDES)
+# CXXFLAGS = -ggdb -Wall -Werror $(INCLUDES)
+CXXFLAGS = -g -std=c++98 -Wall $(INCLUDES)
 CPP = g++
 LDFLAGS = -lm
 

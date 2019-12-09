@@ -34,7 +34,7 @@ private:
 public:
   Node NIL;
   RBTree(){
-    NIL = node_init(nullptr, 0, BLACK, 0);
+    NIL = node_init(NULL, 0, BLACK, 0);
     root = &NIL;
 
   }

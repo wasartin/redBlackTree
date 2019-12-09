@@ -15,8 +15,8 @@
 
 using namespace std;
 
-enum class ACTION{SEARCH, INSERT, DELETE, UNKNOWN};
-enum class FILE_SECTION{TREE, THREAD, COMMANDS, EMPTY, UNKNOWN};
+enum ACTION{SEARCH, INSERT, DELETE};
+enum FILE_SECTION{TREE, THREAD, COMMANDS, EMPTY};
 
 typedef struct Command{
   THREAD_TYPE threadType;

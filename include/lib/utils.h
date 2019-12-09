@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <cstdlib> /* atoi */
 
 #include <stdint.h> /* For uint8_t */
 
