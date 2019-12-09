@@ -1,38 +1,47 @@
 #include <iostream>
 
 #include "../include/models/RBTree.h"
+#include "../include/io/io.h"
 #include "../include/tests/tests.h"
 
 using namespace std;
 
-void init(bool noisy);
-void flagHandling(int argNum, char *args[]);
+uint8_t flagHandling(int argNum, char *args[]);
 void outputHelp();
 
 /**
  * Main runner of the classes
  */
 int main(int argc, char *argv[]){
-  init(false);
-  flagHandling(argc, argv);
+  uint8_t flags = flagHandling(argc, argv);
+
+  if(flags == 2){
+    string fileLocation = "";
+    for(uint8_t i = 1; i < argc; i++){
+      fileLocation += argv[i];
+    }
+    cout << "Given File:= " << fileLocation << endl;
+    RBTree tree;
+    FileContents_t fc;
+    fc.tree = &tree;
+    parseFile(&fc, fileLocation);
+
+  }
 
   return 0;
 }
 
-void init(bool noisy){
-  cout << "Always gotta init" << endl;
-
-}
-
-void flagHandling(int argNum, char *args[]){
+uint8_t flagHandling(int argNum, char *args[]){
   if(argNum >= 2 ){
     if(args[1][0] == '-' && args[1][1] == 'D'){
       cout<< "----------Debug Mode----------"<<endl;
 
       cout<< "---End Of Debug Mode----------"<<endl;
+      return 1;
     }
     else if(args[1][0] == '-' && args[1][1] == 'H'){
       outputHelp();
+      return 0;
     }
     else if(args[1][0] == '-' && args[1][1] == 'T'){
       cout<< "----------Test Mode----------"<<endl;
@@ -42,8 +51,10 @@ void flagHandling(int argNum, char *args[]){
       cout << "Test Success: " << ( (allTests)? "True" : "False") << endl;
 
       cout<< "-------End Of Test Mode------"<<endl;
+      return 0;
     }
   }
+  return 2;
 }
 
 void outputHelp(){

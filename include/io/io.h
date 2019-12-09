@@ -18,7 +18,6 @@ using namespace std;
 enum class ACTION{SEARCH, INSERT, DELETE, UNKNOWN};
 enum class FILE_SECTION{TREE, THREAD, COMMANDS, EMPTY, UNKNOWN};
 
-
 typedef struct Command{
   THREAD_TYPE threadType;
   ACTION action;
@@ -34,7 +33,6 @@ typedef struct FileContents_t{
     vector<Command> commands;
 }FileContents_t;
 
-
 FILE_SECTION determineFileSection(string input);
 //uint8_t extractNumber(string input);
 Command command_init_from_str(string input);
@@ -45,7 +43,11 @@ vector<Thread_t> parseThread(string input);
 vector<Thread_t> parseThread(vector<Thread_t> threads, string input);
 vector<Command> parseCommands(string input);
 
+/**
+ * Parse a given file location into the file contents struct
+ */
 void parseFile(FileContents_t *fileContents, string inputFile);
+
 /**
  * The ouput of the program will include the follow in an output file
  *      - Execution time

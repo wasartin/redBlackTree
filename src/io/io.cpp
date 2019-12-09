@@ -3,7 +3,6 @@
 #include <cctype>
 #include <algorithm>
 
-
 /**
  * Helper function for cleaning the input line up.
  */
@@ -42,41 +41,6 @@ FILE_SECTION determineFileSection(string input){
   return FILE_SECTION::UNKNOWN;
 }
 
-/*
-void openFile(string inputFile){
-  ifstream fileReader(inputFile.c_str());
-
-  if(!fileReader.is_open()){
-    cout << inputFile << ", file not found" << endl;
-  }else{
-
-    vector<Node> nodes;
-    vector<uint8_t> threads;
-    vector<Command> commands;
-
-    string line;
-    uint8_t lineCounter = 0;
-    FILE_SECTION currSection;
-    while(getline(fileReader, line)){
-      lineCounter++;
-
-      currSection = determineFileSection(line);
-      if(currSection == FILE_SECTION::TREE){
-        nodes = parseNodes(line);
-      }
-      else if(currSection == FILE_SECTION::THREAD){
-        threads.push_back(parseThread(line));
-      }
-      else if(currSection == FILE_SECTION::COMMANDS){
-        commands = parseCommands(line);
-      }else{
-        //Empty Line
-      }
-    }
-  }
-}
-*/
-
 void parseFile(FileContents_t *fileContents, string inputFile){
   ifstream fileReader(inputFile.c_str());
 
@@ -87,7 +51,7 @@ void parseFile(FileContents_t *fileContents, string inputFile){
       vector<Thread_t> tempThread;
       vector<Thread_t> readerT;
       vector<Thread_t> writerT;
-
+      //RBTree *tree = new RBTree();
       vector<Command> commands;
 
       string line;
@@ -119,6 +83,8 @@ void parseFile(FileContents_t *fileContents, string inputFile){
             break;
         }
       }
+      //Node *inputNodes = &nodes[0];
+      //buildTreeFromPreOrderNodes(tree, inputNodes, nodes.size());
       fileContents->inputNodes = nodes;
       //fileContents->tree = tree; //TBD
       fileContents->threads = tempThread;
@@ -163,21 +129,6 @@ vector<Thread_t> parseThread(vector<Thread_t> threads, string input){
   return result;
 
 }
-
-/*
-uint8_t extractNumber(string input) {
-  string numberFound;
-  for(uint8_t i = 0; i < input.length(); i++){
-    if(isdigit(input.at(i))){
-      numberFound+= input.at(i);
-    }
-  }
-
-  if(numberFound.length() == 0) numberFound = "0";//if nothing is found
-
-  return atoi(numberFound.c_str());
-}
-*/
 
 Command command_init_from_str(string input){
   //extract ACTION & argument
@@ -234,4 +185,15 @@ vector<Command> parseCommands(string input){
     }
 
   return result;
+}
+
+
+/**
+ * The ouput of the program will include the follow in an output file
+ *      - Execution time
+ *      - The output of each search operation (e.g., thread1, search(10) -> true)
+ *      - The final red-black tree
+ */
+void createOutputFile(uint8_t executionTime, vector<operation> operations, RBTree*tree){
+
 }

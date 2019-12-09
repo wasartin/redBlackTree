@@ -6,7 +6,7 @@ uint8_t newParseNodesTest(bool noisy);
 
 bool IOTests_ALL(bool noisy){
   uint8_t correct = 0;
-  uint8_t expected = 5;
+  uint8_t expected = 7;
 
   uint8_t nodeResult = parseNodesTest(false);
   uint8_t threadResult = parseThreadsTest(false);
@@ -20,7 +20,7 @@ bool IOTests_ALL(bool noisy){
     cout << "\t\tParse Node Test Result: " << +(nodeResult) << "/" << 2 << " passed" << endl;
     cout << "\t\tParse Thread Test Result: " << +(threadResult) << "/" << 1 << " passed" << endl;
     cout << "\t\tParse Command Test Result: " << +(commandResult) << "/" << 1 << " passed" << endl;
-    cout << "\t\tParse File Test Result: " << +(fileContentsResult) << "/" << 1 << " passed" << endl;
+    cout << "\t\tParse File Test Result: " << +(fileContentsResult) << "/" << 3 << " passed" << endl;
   }
 
   return (correct == expected);
@@ -141,6 +141,18 @@ uint8_t parseFileTest(bool noisy){
 
   uint8_t nodeResult = (correctNodes == expectedNodes)? 1 : 0;
 
+  //Tree Test
+/*
+  uint8_t correctNodesInTree = 0;
+  uint8_t expectedNodesInTree = 17;
+  vector<Node> nodesInTree = PreOrderWithNilNodes(fileContents.tree->getRoot());
+  for(uint8_t i = 0; i < nodesInTree.size(); i++){
+    Node currNode = nodesInTree[i];
+      if(expected_value[i] == simpleString(&currNode)) correctNodesInTree++;
+  }
+
+  uint8_t treeResult = (correctNodesInTree == expectedNodesInTree)? 1 : 0;
+*/
   //Threads Tests
   uint8_t correctThread = 0;
   uint8_t expectedThread = 7;
@@ -165,9 +177,8 @@ uint8_t parseFileTest(bool noisy){
   uint8_t commandResult = (correctCommands == expectedCommands)? 1 : 0;
 
   uint8_t correct = nodeResult + threadResult + commandResult;
-  uint8_t expected = 3;
 
-  return (correct == expected)? 1 : 0;
+  return correct;
 }
 
 /* End of IO Tests */
