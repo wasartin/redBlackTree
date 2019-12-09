@@ -26,13 +26,18 @@ Command command_init(THREAD_TYPE threadType, ACTION action, uint8_t arg){
 }
 
 FILE_SECTION determineFileSection(string input){
-  if(isdigit(input.at(0))){
+  if(isdigit(input.at(0)) || input.at(0) == 'f'){
     return FILE_SECTION::TREE;
   }
-  if(input.find("||") != string::npos){
+  //Didn't include 1st letter b/c the case might differ
+  if(input.find("hread") != string::npos && (input.find("earch") != string::npos || input.find("odify") != string::npos) ){
     return FILE_SECTION::THREAD;
-  } else {
+  }
+  if(input.find("||") != string::npos){
     return FILE_SECTION::COMMANDS;
+  }
+  if(input.length() == 0 || input.at(0) == '\n'){
+    return FILE_SECTION::EMPTY;//Idk if I will get empty lines, so
   }
   return FILE_SECTION::UNKNOWN;
 }
@@ -72,6 +77,57 @@ void openFile(string inputFile){
 }
 */
 
+void parseFile(FileContents_t *fileContents, string inputFile){
+  ifstream fileReader(inputFile.c_str());
+
+  if(!fileReader.is_open()){
+    cout << inputFile << ", file not found" << endl;
+  }else{ //parse file
+      vector<Node> nodes;
+      vector<Thread_t> tempThread;
+      vector<Thread_t> readerT;
+      vector<Thread_t> writerT;
+
+      vector<Command> commands;
+
+      string line;
+      uint8_t lineCounter = 0;
+      FILE_SECTION currSection;
+      while(getline(fileReader, line)){
+        lineCounter++;
+        currSection = determineFileSection(line);
+        switch(currSection){
+          case FILE_SECTION::TREE:
+            nodes = parseNodes(line);
+            break;
+          case FILE_SECTION::THREAD:
+            tempThread = parseThread(line);//should change to pointer
+            if(tempThread.size() != 0){
+              if(tempThread[0].threadType == THREAD_TYPE::READER){
+                readerT = tempThread;
+              }else if(tempThread[0].threadType == THREAD_TYPE::WRITER){
+                writerT = tempThread;
+              }
+            }
+            break;
+          case FILE_SECTION::COMMANDS:
+            commands = parseCommands(line);
+            break;
+          case FILE_SECTION::EMPTY:
+            break;
+          default :
+            break;
+        }
+      }
+      fileContents->inputNodes = nodes;
+      //fileContents->tree = tree; //TBD
+      fileContents->threads = tempThread;
+      fileContents->readerThreads = readerT;
+      fileContents->writerThreads = writerT;
+      fileContents->commands = commands;
+  }
+}
+
 vector<Node> parseNodes(string input){
   vector<Node> result;
   istringstream ssCurrCycle;
@@ -94,6 +150,18 @@ vector<Thread_t> parseThread(string input){
   threads = threads_init_from_str(input);
 
   return threads;
+}
+
+vector<Thread_t> parseThread(vector<Thread_t> threads, string input){
+  vector<Thread_t> newThreads = threads_init_from_str(input);
+  vector<Thread_t> result;
+  //If threads.size() == 0, then this is the first time.
+  result.reserve(threads.size() + newThreads.size());
+  result.insert(result.end(), threads.begin(), threads.end() );
+  result.insert(result.end(), newThreads.begin(), newThreads.end() );
+
+  return result;
+
 }
 
 
@@ -151,11 +219,11 @@ vector<Command> parseCommands(string input){
   string delimiter = "||";
   size_t pos = 0;
 
-  uint8_t tempRunVar = 0;
+  //uint8_t tempRunVar = 0;
 
   while((pos = toParse.find(delimiter)) != string::npos){
     token = toParse.substr(0, pos);
-    cout << "Run: " << +(tempRunVar++) << ", Token: " << token << endl;
+    //cout << "Run: " << +(tempRunVar++) << ", Token: " << token << endl;
     while(token.length() != 0){
         Command currCommand = command_init_from_str(token);
         result.push_back(currCommand);

@@ -15,12 +15,8 @@
 using namespace std;
 
 enum class ACTION{SEARCH, INSERT, DELETE, UNKNOWN};
-enum class FILE_SECTION{TREE, THREAD, COMMANDS, UNKNOWN};
+enum class FILE_SECTION{TREE, THREAD, COMMANDS, EMPTY, UNKNOWN};
 
-FILE_SECTION determineFileSection(string input);
-
-// @ DEPRECATED ATM b/c of parse threads
-//void openFile(string inputFile);
 
 typedef struct Command{
   THREAD_TYPE threadType;
@@ -28,14 +24,27 @@ typedef struct Command{
   uint8_t arg;
 }Command;
 
+typedef struct FileContents_t{
+    vector<Node> inputNodes; //temp, for debugging
+    RBTree *tree; //Tree created from nodes
+    vector<Thread_t> threads;//@Deprcated
+    vector<Thread_t> readerThreads;
+    vector<Thread_t> writerThreads;
+    vector<Command> commands;
+}FileContents_t;
+
+
+FILE_SECTION determineFileSection(string input);
 uint8_t extractNumber(string input);
 Command command_init_from_str(string input);
 Command command_init(THREAD_TYPE threadType, ACTION action, uint8_t arg);
 
 vector<Node> parseNodes(string input);
 vector<Thread_t> parseThread(string input);
+vector<Thread_t> parseThread(vector<Thread_t> threads, string input);
 vector<Command> parseCommands(string input);
 
+void parseFile(FileContents_t *fileContents, string inputFile);
 /**
  * The ouput of the program will include the follow in an output file
  *      - Execution time

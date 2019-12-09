@@ -18,10 +18,10 @@ using namespace std;
 
 bool IOTests_ALL(bool noisy);
 
-uint8_t parseFileTest(bool noisy);
 uint8_t parseNodesTest(bool noisy);
 uint8_t parseThreadsTest(bool noisy);
 uint8_t parseCommandsTest(bool noisy);
+uint8_t parseFileTest(bool noisy);
 
 /* End of IO Tests */
 
