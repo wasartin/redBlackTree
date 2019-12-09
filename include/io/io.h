@@ -10,6 +10,7 @@
 
 #include "fileCommands.h"
 #include "../models/RBTree.h"
+#include "../models/threads.h"
 
 using namespace std;
 
@@ -18,18 +19,19 @@ enum class FILE_SECTION{TREE, THREAD, COMMANDS, UNKNOWN};
 
 FILE_SECTION determineFileSection(string input);
 
-void openFile(string inputFile);
+// @ DEPRECATED ATM b/c of parse threads
+//void openFile(string inputFile);
 
 typedef struct Command{
-  uint8_t threadNum;
+  THREAD_TYPE threadType;
   ACTION action;
   uint8_t arg;
 }Command;
 
-Command command_init(uint8_t threadNum, ACTION action, uint8_t arg);
+Command command_init(THREAD_TYPE threadType, ACTION action, uint8_t arg);
 
 vector<Node> parseNodes(string input);
-uint8_t parseThread(string input);
+vector<Thread_t> parseThread(string input);
 vector<Command> parseCommands(string input);
 
 /**

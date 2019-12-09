@@ -43,6 +43,7 @@ bool runAllTests(bool noisy){
 
   bool result = nodes && io && bstTree && rbtree;
   return result;
+  //return io;
 }
 
 

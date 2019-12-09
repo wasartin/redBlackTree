@@ -14,6 +14,9 @@ using namespace std;
 
 /**
  * An enum to represent the color of the Node
+ *      RED: For a red colored node
+ *      BLACK: For a black colored node
+ *      UNKNOWN: For the NULL object design pattern
  */
 enum COLOR{RED, BLACK, UNKNOWN};
 

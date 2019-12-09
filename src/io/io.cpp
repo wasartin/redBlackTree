@@ -16,7 +16,7 @@ void cleanseInputString(string *input){
     [l = std::locale{}](auto ch) { return std::isspace(ch, l); }
   ), end(*input));
 }
-
+/*
 Command command_init(uint8_t threadNum, ACTION action, uint8_t arg){
   Command command = {};
   command.threadNum = threadNum;
@@ -36,7 +36,8 @@ FILE_SECTION determineFileSection(string input){
   }
   return FILE_SECTION::UNKNOWN;
 }
-
+*/
+/*
 void openFile(string inputFile){
   ifstream fileReader(inputFile.c_str());
 
@@ -69,6 +70,7 @@ void openFile(string inputFile){
     }
   }
 }
+*/
 
 vector<Node> parseNodes(string input){
   vector<Node> result;
@@ -85,7 +87,14 @@ vector<Node> parseNodes(string input){
   return result;
 }
 
-uint8_t parseThread(string input){
+vector<Thread_t> parseThread(string input){
+
+  vector<Thread_t> threads;
+
+  threads = threads_init_from_str(input);
+
+  return threads;
+  /*
   string numberFound;
   for(uint8_t i = 0; i < input.length(); i++){
     if(isdigit(input.at(i))){
@@ -96,9 +105,12 @@ uint8_t parseThread(string input){
   if(numberFound.length() == 0) numberFound = "0";//if nothing is found
 
   return atoi(numberFound.c_str());
+  */
 }
 
 
+/* @DEPRECATED */
+/*
 vector<Command> parseCommands(string input){
   //Adding this for easier parsing
   input += " ||";
@@ -123,7 +135,7 @@ vector<Command> parseCommands(string input){
     while(ssCurrCycle.good()){
       getline(ssCurrCycle, tokenite, ',');
       if(tokenite.find("thread") != string::npos){
-        threadNum = parseThread(tokenite);
+        threadNum = 0; // = parseThread(tokenite);
       } else{ //kinda wonky, I know, but now I can add it right to the vector
         if(tokenite.find("search") != string::npos){
           act = ACTION::SEARCH;
@@ -148,3 +160,4 @@ vector<Command> parseCommands(string input){
 
   return result;
 }
+*/
