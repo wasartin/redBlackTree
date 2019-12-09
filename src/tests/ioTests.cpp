@@ -6,19 +6,19 @@ uint8_t newParseNodesTest(bool noisy);
 
 bool IOTests_ALL(bool noisy){
   uint8_t correct = 0;
-  uint8_t expected = 3;
+  uint8_t expected = 4;
 
   uint8_t nodeResult = parseNodesTest(false);
   uint8_t threadResult = parseThreadsTest(false);
-  //uint8_t commandResult = parseCommandsTest(false);
+  uint8_t commandResult = parseCommandsTest(noisy);
 
-  correct = nodeResult + threadResult;
+  correct = nodeResult + threadResult + commandResult;
 
   if(noisy){
     cout << "\tIO Tests: " << +(correct) << "/" << +(expected) << endl;
     cout << "\t\tIO Node Test Result: " << +(nodeResult) << "/" << 2 << " passed" << endl;
     cout << "\t\tIO Thread Test Result: " << +(threadResult) << "/" << 1 << " passed" << endl;
-    //cout << "\t\tIO Command Test Result: " << +(commandResult) << "/" << 1 << " passed" << endl;
+    cout << "\t\tIO Command Test Result: " << +(commandResult) << "/" << 1 << " passed" << endl;
   }
 
   return (correct == expected);
@@ -125,5 +125,24 @@ uint8_t parseCommandsTest(bool noisy){
   return (correct == expected) ? 1 : 0;
 }
 */
+
+uint8_t parseCommandsTest(bool noisy){
+
+  string inputString = "search(10) || delete(10) || insert(15) || insert(5) || search(20)";
+
+  vector<Command> result;
+  result = parseCommands(inputString);
+
+  uint8_t correct = 0;
+  uint8_t expected = 6;
+  if(result.size() == 5) correct++;
+  if(result[0].threadType == THREAD_TYPE::READER && result[0].action == ACTION::SEARCH && result[0].arg == 10) correct++;
+  if(result[1].threadType == THREAD_TYPE::WRITER && result[1].action == ACTION::DELETE && result[1].arg == 10) correct++;
+  if(result[2].threadType == THREAD_TYPE::WRITER && result[2].action == ACTION::INSERT && result[2].arg == 15) correct++;
+  if(result[3].threadType == THREAD_TYPE::WRITER && result[3].action == ACTION::INSERT && result[3].arg ==  5) correct++;
+  if(result[4].threadType == THREAD_TYPE::READER && result[4].action == ACTION::SEARCH && result[4].arg == 20) correct++;
+
+  return (correct == expected) ? 1 : 0;
+}
 
 /* End of IO Tests */

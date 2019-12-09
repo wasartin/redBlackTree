@@ -16,10 +16,10 @@ void cleanseInputString(string *input){
     [l = std::locale{}](auto ch) { return std::isspace(ch, l); }
   ), end(*input));
 }
-/*
-Command command_init(uint8_t threadNum, ACTION action, uint8_t arg){
+
+Command command_init(THREAD_TYPE threadType, ACTION action, uint8_t arg){
   Command command = {};
-  command.threadNum = threadNum;
+  command.threadType = threadType;
   command.action = action;
   command.arg = arg;
   return command;
@@ -36,7 +36,7 @@ FILE_SECTION determineFileSection(string input){
   }
   return FILE_SECTION::UNKNOWN;
 }
-*/
+
 /*
 void openFile(string inputFile){
   ifstream fileReader(inputFile.c_str());
@@ -94,7 +94,10 @@ vector<Thread_t> parseThread(string input){
   threads = threads_init_from_str(input);
 
   return threads;
-  /*
+}
+
+
+uint8_t extractNumber(string input) {
   string numberFound;
   for(uint8_t i = 0; i < input.length(); i++){
     if(isdigit(input.at(i))){
@@ -105,12 +108,39 @@ vector<Thread_t> parseThread(string input){
   if(numberFound.length() == 0) numberFound = "0";//if nothing is found
 
   return atoi(numberFound.c_str());
-  */
 }
 
+Command command_init_from_str(string input){
+  //extract ACTION & argument
+  THREAD_TYPE threadType;
+  ACTION act;
+  uint8_t arg;
+  if(input.find("search") != string::npos){
+    threadType = THREAD_TYPE::READER;
+    act = ACTION::SEARCH;
+    arg = extractNumber(input);
+  } else if(input.find("insert") != string::npos){
+    threadType = THREAD_TYPE::WRITER;
+    act = ACTION::INSERT;
+    arg = extractNumber(input);
+  } else if(input.find("delete") != string::npos){
+    threadType = THREAD_TYPE::WRITER;
+    act = ACTION::DELETE;
+    arg = extractNumber(input);
+  } else{
+    threadType = THREAD_TYPE::UNKNOWN;
+    act = ACTION::UNKNOWN;
+    arg = extractNumber(input);
+  }
 
-/* @DEPRECATED */
-/*
+  Command result;
+  result = {};
+  result.threadType = threadType;
+  result.action = act;
+  result.arg = arg;
+  return result;
+}
+
 vector<Command> parseCommands(string input){
   //Adding this for easier parsing
   input += " ||";
@@ -121,43 +151,18 @@ vector<Command> parseCommands(string input){
   string delimiter = "||";
   size_t pos = 0;
 
+  uint8_t tempRunVar = 0;
+
   while((pos = toParse.find(delimiter)) != string::npos){
     token = toParse.substr(0, pos);
-
-    istringstream ssCurrCycle;
-    ssCurrCycle.str(token);
-    string tokenite;
-
-    uint8_t threadNum = 0;
-    ACTION act = ACTION::UNKNOWN;
-    uint8_t arg = 0;
-
-    while(ssCurrCycle.good()){
-      getline(ssCurrCycle, tokenite, ',');
-      if(tokenite.find("thread") != string::npos){
-        threadNum = 0; // = parseThread(tokenite);
-      } else{ //kinda wonky, I know, but now I can add it right to the vector
-        if(tokenite.find("search") != string::npos){
-          act = ACTION::SEARCH;
-          arg = parseThread(tokenite); //bad practice, but it does extract the number...
-        } else if(tokenite.find("insert") != string::npos){
-          act = ACTION::INSERT;
-          arg = parseThread(tokenite);
-        } else if(tokenite.find("delete") != string::npos){
-          act = ACTION::DELETE;
-          arg = parseThread(tokenite);
-        } else{
-          act = ACTION::UNKNOWN;
-          arg = 0;
-        }
-        Command currCommand = command_init(threadNum, act, arg);
+    cout << "Run: " << +(tempRunVar++) << ", Token: " << token << endl;
+    while(token.length() != 0){
+        Command currCommand = command_init_from_str(token);
         result.push_back(currCommand);
         toParse.erase(0, pos + delimiter.length());
+        token = "";//reset token
       }
     }
 
-  }
-
   return result;
 }
-*/

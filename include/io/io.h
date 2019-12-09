@@ -28,6 +28,8 @@ typedef struct Command{
   uint8_t arg;
 }Command;
 
+uint8_t extractNumber(string input);
+Command command_init_from_str(string input);
 Command command_init(THREAD_TYPE threadType, ACTION action, uint8_t arg);
 
 vector<Node> parseNodes(string input);
