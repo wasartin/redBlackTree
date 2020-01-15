@@ -2,9 +2,9 @@
 
 void node_init(Node *node, uint8_t key){
   node->key = key;
-  node->left = nullptr;
-  node->right = nullptr;
-  node->parent = nullptr;
+  node->left = NULL;
+  node->right = NULL;
+  node->parent = NULL;
   node->size = 1;
   node->color = RED;
   pthread_mutex_init(node->m, NULL);
@@ -27,7 +27,7 @@ Node node_init_from_str(string data){
   }else{
     string numStr = "";
     for(uint8_t i = 0; i < data.length(); i++){
-      COLOR color = UNKNOWN;
+      COLOR color = RED;
       if(isdigit(data.at(i))){
         numStr+=data.at(i);
       }else if(data.at(i) == 'b' || data.at(i) == 'r'){//f is new for NIL NODES
@@ -35,7 +35,10 @@ Node node_init_from_str(string data){
         //cout << "\tNum: " << numStr << ", Color: " << ((color == BLACK)? "Black" : "Red") << endl; // Debugging
         if(data.at(i) != 'f'){//NILL NODE
           newNode = node_init(NULL, atoi(numStr.c_str()), color, 1);
-
+          Node tempL = node_init_from_str("f");
+          Node tempR = node_init_from_str("f");
+          newNode.left = &tempL;
+          newNode.right = &tempR;
         }
 
       }
@@ -84,6 +87,16 @@ void printNodes(string prefix, Node *n){
     printNodes(prefix + "     ", n->right);
     cout << prefix << "|-- " << simpleString(n) << endl;
     printNodes(prefix + "     ", n->left);
+  }
+}
+
+void printNodesAndNil(string prefix, Node *n){
+  if(!isNilNode(n)){
+    printNodes(prefix + "     ", n->right);
+    cout << prefix << "|-- " << simpleString(n) << endl;
+    printNodes(prefix + "     ", n->left);
+  } else{
+        cout << prefix << "|-- " << simpleString(n) << endl;
   }
 }
 
@@ -138,7 +151,9 @@ vector<Node> InOrder(Node *node_x){
  */
 vector<Node> PreOrder(Node *node_x){
   vector<Node> result;
-  if(isNilNode(node_x)) return result;
+  if(isNilNode(node_x)) {
+    return result;
+  }
 
   result.push_back(*node_x);
 
@@ -146,6 +161,29 @@ vector<Node> PreOrder(Node *node_x){
   result.insert(result.end(), left.begin(), left.end());
 
   vector<Node> right = PreOrder(node_x->right);
+  result.insert(result.end(), right.begin(), right.end());
+
+  return result;
+}
+
+/**
+ * List Keys of the given subtree in Pre Order
+ * Root, Left subtree, Right Subtree
+ * Param: node_x, a pointer to a node in a Binary Tree
+ */
+vector<Node> PreOrderWithNilNodes(Node *node_x){
+  vector<Node> result;
+  if(isNilNode(node_x)) {
+    result.push_back(*node_x);
+    return result;
+  }
+
+  result.push_back(*node_x);
+
+  vector<Node> left = PreOrderWithNilNodes(node_x->left);
+  result.insert(result.end(), left.begin(), left.end());
+
+  vector<Node> right = PreOrderWithNilNodes(node_x->right);
   result.insert(result.end(), right.begin(), right.end());
 
   return result;

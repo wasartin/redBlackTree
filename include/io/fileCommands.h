@@ -9,7 +9,7 @@
 using namespace std;
 
 typedef struct{
-  uint8_t threadId; //thead1
+  uint8_t threadId; //@Deprecated
   string action;    //serach(10)
   string result;    //-> true
 }operation;

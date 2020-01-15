@@ -14,20 +14,23 @@ using namespace std;
 
 /**
  * An enum to represent the color of the Node
+ *      RED: For a red colored node
+ *      BLACK: For a black colored node
+ *      UNKNOWN: For the NULL object design pattern
  */
-enum COLOR{RED, BLACK, UNKNOWN};
+enum COLOR{RED, BLACK};
 
 /**
  * A struct to define a node, slightly modified from the one given
  * by the assignment
  */
 typedef struct Node{
-  uint8_t key = 0;
-  Node *left = nullptr;
-  Node *right = nullptr;
-  Node *parent = nullptr;
-  uint8_t size = 0;
-  COLOR color = UNKNOWN;
+  uint8_t key;
+  Node *left = NULL;
+  Node *right = NULL;
+  Node *parent = NULL;
+  uint8_t size;
+  COLOR color;
   pthread_mutex_t *m = NULL;
 } Node;
 
@@ -45,6 +48,7 @@ void percolateUpUpdates(Node *node_v);
 
 string simpleString(Node *node);
 void printNodes(string prefix, Node *n);
+void printNodesAndNil(string prefix, Node *n);
 
 bool isNilNode(Node *node);
 
@@ -63,6 +67,8 @@ vector<Node> InOrder(Node *node_x);
  * Param: node_x, a pointer to a node in a Binary Tree
  */
 vector<Node> PreOrder(Node *node_x);
+
+vector<Node> PreOrderWithNilNodes(Node *node_x);
 
 /**
  * List Keys of the given subtree in Post Order

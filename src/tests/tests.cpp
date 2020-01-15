@@ -43,6 +43,8 @@ bool runAllTests(bool noisy){
 
   bool result = nodes && io && bstTree && rbtree;
   return result;
+
+  ///return BSTreeTest_All(noisy);
 }
 
 
@@ -164,9 +166,9 @@ uint8_t RBInsert_RBTreeTest(bool noisy){
   RBTree *tree = new RBTree();
 
   //Node a = node_init(&tree->NIL, 5, RED, 1);
-  Node a = node_init(nullptr, 5, RED, 1);
-  Node b = node_init(nullptr, 10, RED, 1);
-  Node c = node_init(nullptr, 20, RED, 1);
+  Node a = node_init( NULL, 5, RED, 1);
+  Node b = node_init( NULL, 10, RED, 1);
+  Node c = node_init( NULL, 20, RED, 1);
 
   RBInsert(tree, &a);
   if(tree->getRoot() == &a){

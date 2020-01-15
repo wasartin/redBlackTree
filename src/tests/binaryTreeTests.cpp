@@ -1,6 +1,5 @@
 #include "../../include/tests/binaryTreeTests.h"
 
-
 void inputNodesFromFileExample(Node *nodes){
   nodes[0] = node_init(NULL, 3, RED, 1);
   nodes[1] = node_init(NULL, 7, RED, 1);
@@ -15,7 +14,7 @@ void inputNodesFromFileExample(Node *nodes){
 /* Start of Binary Tree TESTS*/
 bool BSTreeTest_All(bool noisy){
   uint8_t correct = 0;
-  uint8_t expected = 6;
+  uint8_t expected = 7;//7
 
   uint8_t inOrder = inOrder_BSTreeTest(noisy);
   uint8_t preOrder = preOrderTest(noisy);
@@ -24,8 +23,9 @@ bool BSTreeTest_All(bool noisy){
   uint8_t maximum = Maximum_BSTreeTest();
   uint8_t succ = Successor_BSTreeTest();
   uint8_t pred = Predecessor_BSTreeTest();
+  uint8_t treeFromPre = makeTreeFromPreOrder_BSTreeTest(noisy);
 
-  correct = inOrder + preOrder + minimum + maximum + succ + pred;
+  correct = inOrder + preOrder + minimum + maximum + succ + pred + treeFromPre;
 
   if(noisy){
     cout << "\tBS Tree Tests: " << +(correct) << "/" << +(expected) << endl;
@@ -36,6 +36,7 @@ bool BSTreeTest_All(bool noisy){
     cout << "\t\tBS Maximum: " << +(maximum) << "/" << 1 << endl;
     cout << "\t\tBS Successor: " << +(succ) << "/" << 1 << endl;
     cout << "\t\tBS Predecessor: " << +(pred) << "/" << 1 << endl;
+    cout << "\t\tBS Tree From Preorder" << +(treeFromPre) << "/" << 1 << endl;
   }
 
   return (correct == expected);
@@ -254,6 +255,32 @@ uint8_t Predecessor_BSTreeTest(){
   delete tree;
 
   return (correct == expected) ? 1 : 0;
+}
+
+uint8_t makeTreeFromPreOrder_BSTreeTest(bool noisy){
+  uint8_t correct = 0;
+  uint8_t expected = 17;
+
+  string expected_values[expected] = {"7b", "3b", "f", "f", "18r", "10b", "8r", "f", "f", "11r", "f", "f", "22b", "f", "26r", "f", "f"};
+  RBTree *tree = new RBTree();
+
+  Node *inputNodes = (Node*)malloc(17 * sizeof(*inputNodes));
+  setNodesFromStringArr(inputNodes, expected_values, expected);
+
+  buildTreeFromPreOrderNodes(tree, inputNodes, expected);
+  vector<Node> preOrderWithNil = PreOrderWithNilNodes(tree->getRoot());
+
+  uint8_t i = 0;
+  for (vector<Node>::iterator n = preOrderWithNil.begin();
+                              n != preOrderWithNil.end();
+                              ++n){
+
+    if(expected_values[i++] == simpleString(&*n)) correct++;
+  }
+
+  free(inputNodes);
+  delete tree;
+  return (correct == expected)? 1 : 0;
 }
 
 

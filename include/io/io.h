@@ -8,29 +8,45 @@
 #include <vector>
 #include <cstring>
 
+#include "../lib/utils.h" /* For uint8_t extractNumber(string input) */
 #include "fileCommands.h"
 #include "../models/RBTree.h"
+#include "../models/threads.h"
 
 using namespace std;
 
-enum class ACTION{SEARCH, INSERT, DELETE, UNKNOWN};
-enum class FILE_SECTION{TREE, THREAD, COMMANDS, UNKNOWN};
-
-FILE_SECTION determineFileSection(string input);
-
-void openFile(string inputFile);
+enum ACTION{SEARCH, INSERT, DELETE};
+enum FILE_SECTION{TREE, THREAD, COMMANDS, EMPTY};
 
 typedef struct Command{
-  uint8_t threadNum;
+  THREAD_TYPE threadType;
   ACTION action;
   uint8_t arg;
 }Command;
 
-Command command_init(uint8_t threadNum, ACTION action, uint8_t arg);
+typedef struct FileContents_t{
+    vector<Node> inputNodes; //temp, for debugging
+    RBTree *tree; //Tree created from nodes
+    vector<Thread_t> threads;//@Deprcated
+    vector<Thread_t> readerThreads;
+    vector<Thread_t> writerThreads;
+    vector<Command> commands;
+}FileContents_t;
+
+FILE_SECTION determineFileSection(string input);
+//uint8_t extractNumber(string input);
+Command command_init_from_str(string input);
+Command command_init(THREAD_TYPE threadType, ACTION action, uint8_t arg);
 
 vector<Node> parseNodes(string input);
-uint8_t parseThread(string input);
+vector<Thread_t> parseThread(string input);
+vector<Thread_t> parseThread(vector<Thread_t> threads, string input);
 vector<Command> parseCommands(string input);
+
+/**
+ * Parse a given file location into the file contents struct
+ */
+void parseFile(FileContents_t *fileContents, string inputFile);
 
 /**
  * The ouput of the program will include the follow in an output file

@@ -25,7 +25,7 @@ uint8_t Minimum_BSTreeTest();
 uint8_t Maximum_BSTreeTest();
 uint8_t Successor_BSTreeTest();
 uint8_t Predecessor_BSTreeTest();
-
+uint8_t makeTreeFromPreOrder_BSTreeTest(bool noisy);
 /* End of Binary Search Tree Tests */
 
 
